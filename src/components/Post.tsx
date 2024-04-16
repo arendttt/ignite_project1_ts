@@ -16,27 +16,31 @@ interface Author {
 interface Content {
   type: 'paragraph' | 'link';
   content: string;
-
 }
 
-interface PostProps {
+export interface PostType {
+  id: number;
   author: Author;
   publishedAt: Date;
   content: Content[]; // é um array com vários objetos contento type e content
 }
 
-export function Post({ author, publishedAt, content }: PostProps) {
+interface PostProps {
+  post: PostType;
+}
+
+export function Post({ post }: PostProps) {
   const [comments, setComments] = useState([
     'Post muito legal!'
   ]);
 
   const [newCommentText, setNewCommentText] = useState('');
 
-  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+  const publishedDateFormatted = format(post.publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR, // traduzindo a data para português
   })
 
-  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+  const publishedDateRelativeToNow = formatDistanceToNow(post.publishedAt, {
     locale: ptBR,
     addSuffix: true
   })
@@ -73,18 +77,18 @@ export function Post({ author, publishedAt, content }: PostProps) {
       <header>
         <div className={styles.author}>
 
-          <Avatar src={author.avatarUrl} />
+          <Avatar src={post.author.avatarUrl} />
 
           <div className={styles.authorInfo}>
-            <strong>{author.name}</strong>
-            <span>{author.role}</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
 
         </div>
 
         <time 
           title={publishedDateFormatted} /* para quando o usuário passar o mouse em cima aparecer a data*/ 
-          dateTime={publishedAt.toISOString()}  /* para acessibilidade ou SEO */
+          dateTime={post.publishedAt.toISOString()}  /* para acessibilidade ou SEO */
         >
           {publishedDateRelativeToNow}
         </time> 
@@ -92,7 +96,7 @@ export function Post({ author, publishedAt, content }: PostProps) {
       </header>
 
       <div className={styles.content}>
-        {content.map(line => {
+        {post.content.map(line => {
           if(line.type === 'paragraph') {
             return <p key={line.content}>{line.content}</p>
 
