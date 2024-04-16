@@ -4,7 +4,12 @@ import { ThumbsUp, Trash } from "phosphor-react";
 import styles from "./Comment.module.css";
 import { useState } from "react";
 
-export function Comment({ content, onDeleteComment }) {
+interface CommentProps {
+  content: string;
+  onDeleteComment: (comment: string) => void; // a função utiliza um parâmetro que é uma string, e a função não retorna nada (void)
+}
+
+export function Comment({ content, onDeleteComment }: CommentProps) {
   const [likeCount, setLikeCount] = useState(0);
 
   function handleDeleteComment() {
@@ -22,6 +27,7 @@ export function Comment({ content, onDeleteComment }) {
        <Avatar
           hasBorder={false}
           src="https://github.com/arendttt.png" 
+          alt=""
         />
 
         <div className={styles.commentBox}>
